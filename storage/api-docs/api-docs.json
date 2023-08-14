@@ -8,13 +8,32 @@
     "paths": {
         "/api/skills": {
             "get": {
-                "summary": "Get list of skills",
+                "tags": [
+                    "Skills"
+                ],
+                "summary": "Get a list of skills",
                 "operationId": "6acb38b223d6471cc32eab45ea57be4b",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search query for filtering skills by title and slug using full-text search",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
+                        "description": "Successful response"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "post": {
                 "summary": "Create a new skill",
@@ -49,7 +68,12 @@
                     "422": {
                         "description": "Unprocessable Entity"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/skills/{id}": {
@@ -74,7 +98,12 @@
                     "404": {
                         "description": "Skill not found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "put": {
                 "summary": "Update a skill by ID",
@@ -123,7 +152,12 @@
                     "422": {
                         "description": "Unprocessable Entity"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "delete": {
                 "summary": "Delete a skill by ID",
@@ -146,7 +180,94 @@
                     "404": {
                         "description": "Skill not found"
                     }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login as an admin user",
+                "operationId": "0fc9610184083ac6dddab2c63139225a",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "admin@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password"
+                                    },
+                                    "remember": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful login"
+                    },
+                    "403": {
+                        "description": "Email or password is incorrect or user is not an admin"
+                    }
                 }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout the currently authenticated user",
+                "operationId": "67d5147477c548bfbc3f982833bbc7bd",
+                "responses": {
+                    "204": {
+                        "description": "Logout successful"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get the currently authenticated user's details",
+                "operationId": "2130b7cce3aebae5b2f0aecd8f3cf0d3",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     }

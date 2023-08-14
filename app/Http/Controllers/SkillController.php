@@ -31,12 +31,9 @@ class SkillController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Successful response",
-     *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/SkillResource")
-     *         )
-     *     )
+     *         description="Successful response"
+     *     ),
+     *     security={{ "bearerAuth":{} }}
      * )
      */
     public function index()
@@ -64,7 +61,8 @@ class SkillController extends Controller
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(response=200, description="Successful operation"),
-     *     @OA\Response(response=404, description="Skill not found")
+     *     @OA\Response(response=404, description="Skill not found"),
+     *     security={{ "bearerAuth":{} }}
      * )
      */
     public function show(Skill $skill)
@@ -93,7 +91,8 @@ class SkillController extends Controller
      *       )
      *     ),
      *     @OA\Response(response=201, description="Skill Created"),
-     *     @OA\Response(response=422, description="Unprocessable Entity")
+     *     @OA\Response(response=422, description="Unprocessable Entity"),
+     *     security={{ "bearerAuth":{} }}
      * )
      */
     public function store(StoreSkillRequest $request)
@@ -124,7 +123,8 @@ class SkillController extends Controller
      *     ),
      *     @OA\Response(response=200, description="Skill Updated"),
      *     @OA\Response(response=404, description="Skill not found"),
-     *     @OA\Response(response=422, description="Unprocessable Entity")
+     *     @OA\Response(response=422, description="Unprocessable Entity"),
+     *     security={{ "bearerAuth":{} }}
      * )
      */
     public function update(UpdateSkillRequest $request, Skill $skill)
@@ -146,7 +146,8 @@ class SkillController extends Controller
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(response=200, description="Skill Deleted"),
-     *     @OA\Response(response=404, description="Skill not found")
+     *     @OA\Response(response=404, description="Skill not found"),
+     *     security={{ "bearerAuth":{} }}
      * )
      */
     public function destroy(Skill $skill)
