@@ -9,28 +9,29 @@ export const useSkillsStore = defineStore('skill', {
     skills: [],
     skill: [],
     errors:{},
+    search:'',
     router:useRouter()
   }),
   actions: {
-    async index(){
-      const response = await axios.get('skills');
+    async index(search){
+      this.search=search
+      const  response = await axios.get('skills?search='+this.search);
       this.skills= response.data.data;
 
     },
     async show(id){
       const response = await axios.get('skills/'+id);
-      const {data}=await response.json();
-      console.log(data);
-      this.skill= data;
+      this.skill= response.data.data;
 
     },
-    async create(data){
+    async store(data){
      try{
       await axios.post('skills',data);
       await this.router.push({name:'skillIndex'});
      }catch(error){
       if(error.response.status===422){
         this.errors=error.response.data.errors;
+        console.log(this.errors);
       }}
     },
     async update( id){
