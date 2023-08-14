@@ -1,0 +1,153 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Skills API",
+        "description": "API endpoints for CRUD operations on skills",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/skills": {
+            "get": {
+                "summary": "Get list of skills",
+                "operationId": "6acb38b223d6471cc32eab45ea57be4b",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create a new skill",
+                "operationId": "4725cd560d3046ae33bd690208e21d41",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "slug"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Skill Title"
+                                    },
+                                    "slug": {
+                                        "type": "string",
+                                        "example": "skill-slug"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Skill Created"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            }
+        },
+        "/api/skills/{id}": {
+            "get": {
+                "summary": "Get a single skill by ID",
+                "operationId": "81b9cbc27bbdd8b5a6591975bf75441a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the skill",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Skill not found"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update a skill by ID",
+                "operationId": "6c932a7a6f40be346ab93e4dd28f14f2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the skill",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "slug"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Skill Title"
+                                    },
+                                    "slug": {
+                                        "type": "string",
+                                        "example": "skill-slug"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Skill Updated"
+                    },
+                    "404": {
+                        "description": "Skill not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a skill by ID",
+                "operationId": "7401a82a4b0de61e80c67901e89d62dd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the skill",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Skill Deleted"
+                    },
+                    "404": {
+                        "description": "Skill not found"
+                    }
+                }
+            }
+        }
+    }
+}
