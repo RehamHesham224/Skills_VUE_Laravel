@@ -29,23 +29,35 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      meta:{
+        requiredAuth:true
+      }
     },
     {
       path: '/skills',
       name: 'skillIndex',
-      component: () => import('../views/skills/SkillIndex.vue')
+      component: () => import('../views/skills/SkillIndex.vue'),
+      meta:{
+        requiredAuth:true
+      }
     },
     {
       path: '/skills/create',
       name: 'SkillCreate',
-      component: () => import('../views/skills/SkillCreate.vue')
+      component: () => import('../views/skills/SkillCreate.vue'),
+      meta:{
+        requiredAuth:true
+      }
     },
     {
       path: '/skills/:id/edit',
       name: 'SkillEdit',
       component: () => import('../views/skills/SkillEdit.vue'),
       props:true,
+      meta:{
+        requiredAuth:true
+      }
     },
     {
       path: '/login',
