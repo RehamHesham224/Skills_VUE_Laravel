@@ -20,18 +20,35 @@ class SkillController extends Controller
     /**
      * @OA\Get(
      *     path="/api/skills",
-     *     summary="Get list of skills",
-     *     @OA\Response(response=200, description="Successful operation")
+     *     summary="Get a list of skills",
+     *     tags={"Skills"},
+     *     @OA\Parameter(
+     *         name="search",
+     *         in="query",
+     *         description="Search query for filtering skills by title and slug using full-text search",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(ref="#/components/schemas/SkillResource")
+     *         )
+     *     )
      * )
      */
     public function index()
     {
-        $skills=Skill::query()
-            ->when(request('search'),function($query,$search){
-                $query->whereRaw('match(title,slug) against(? in boolean mode)',[$search]);
-//            $query->where('title','like ' , '%'.$search.'%');
+        // Use the query parameter 'search' to filter skills by title and slug using full-text search
+        $skills = Skill::query()
+            ->when(request('search'), function ($query, $search) {
+                $query->whereRaw('MATCH(title, slug) AGAINST(? IN BOOLEAN MODE)', [$search]);
             })
-           ->get();
+            ->get();
+
+        // Return a collection of SkillResource instances
         return SkillResource::collection($skills);
     }
 
