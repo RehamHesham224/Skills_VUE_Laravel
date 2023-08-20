@@ -19,4 +19,6 @@
 - Real Time Search
   - Using key event to handle issue of "request every character typed for search"
 
+![img_2.png](img_2.png)
+  
 ![img.png](img.png)
