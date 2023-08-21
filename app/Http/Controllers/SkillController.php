@@ -95,7 +95,7 @@ class SkillController extends Controller
      *     security={{ "bearerAuth":{} }}
      * )
      */
-    public function store(StoreSkillRequest $request)
+    public function store(StoreSkillRequest $request): \Illuminate\Http\JsonResponse
     {
         Skill::create($request->validated());
         return response()->json('Skill Created', 201);

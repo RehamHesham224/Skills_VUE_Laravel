@@ -13,63 +13,87 @@ use Tests\TestCase;
 
 class SkillTest extends TestCase
 {
-    /**
-     * @var \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|mixed
-     */
+    use RefreshDatabase;
     private User $admin;
+    private  $skill;
+    private  $skills;
+    private  $skillResource;
+    private $skillResources;
 
-    /**
-     * A basic feature test example.
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->admin=$this->createAdmin();
+    public function signIn($user= null){
+        $user= $user ?: User::factory()->create(['is_admin' => 1]);
+
+        $this->actingAs($user);
+
+        return $user;
     }
-    public function test_get_all_skills(){
+    public function test_get_all_skills_resources(){
+        $this->signIn();
         //arrange
-        //$skill= Skill::factory()->create();
-        $skills=Skill::all();
+        $skills= Skill::factory()->count(5)->create();
         $resource=SkillResource::collection($skills);
         $resourceResponse=$resource->response()->getData(true);
         //act
-        $response = $this->actingAs($this->admin)->getJson('/api/skills/');
+        $response = $this->getJson('/api/skills');
         $json=$response->json();
         //assert
         $response->assertStatus(200);
         $this->assertEquals($json,$resourceResponse);
     }
-
-    public function test_show_skill(): void
+    public function test_show_skill_resource(): void
     {
-        //arrange
-        $skill=Skill::find(2);
+        //arrange in setup method
+        $skill= Skill::factory()->create();
         $resource=new SkillResource($skill);
         //act
-        $response = $this->actingAs($this->admin)->getJson('/api/skills/'.$skill->id);
+        $this->signIn();
+        $response = $this->getJson('/api/skills/'.$skill->id);
         //assert
         $response->assertStatus(200);
-        $this->assertEquals($response,$response);
         $response->assertResource($resource);
     }
-//    public function test_show_skill(): void
-//    {
-//        //arrange
-////        $skill= Skill::factory()->create();
-//        $skill=Skill::find(2);
-//        $resource=new SkillResource($skill);
-//        $resourceResponse=$resource->response()->getData(true);
-//        //act
-//        $response = $this->actingAs($this->admin)->getJson('/api/skills/'.$skill->id);
-//        $json=$response->json();
-//        //assert
-//        $response->assertStatus(200);
-//        $this->assertEquals($json,$resourceResponse);
-//        $response->assertResource($resource);
-//
-//    }
-    private function createAdmin(){
-        return User::factory()->create(['is_admin' => 1]);
+    public function test_skill_can_be_created(){
+        $this->withoutExceptionHandling();
+        //arrange in setup method
+        $skill=[
+            "title" => "Title created",
+            'slug'=> "slug created",
+        ];
+        //act
+        $this->signIn();
+        $this->postJson('/api/skills', $skill);
+        //assert
+        $this->assertDatabaseHas('skills',$skill);
     }
+    public function test_skill_can_be_updated(){
+        $this->withoutExceptionHandling();
+        //arrange in setup method
+        $skill= Skill::factory()->create();
+        $resource=new SkillResource($skill);
+        //act
+        $this->signIn();
+        $this->patchJson('/api/skills/'.$skill->id, [
+            "title" => "Changed",
+            'slug'=>'Changed'
+        ]);
+        //assert
+        $this->assertDatabaseHas('skills',[
+            'title' => 'Changed',
+            'slug'=>'Changed'
+        ]);
+    }
+    public function test_skill_require_title(){
+        //arrange in setup method
+        $skill= Skill::factory()->raw(['title' => '']);
+        $resource=new SkillResource($skill);
+        //act
+        $this->signIn();
+        $response=$this->post('/api/skills');
+        //assert
+        $response
+        ->assertStatus(302)
+        ->assertSessionHasErrors('title');
+    }
+
 
 }
