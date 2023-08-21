@@ -8,6 +8,8 @@
   - Authentication Operations
 - API documentation
   - use Swagger to make API documentation
+- Unit Testing
+  - test skill features
 ![img_1.png](img_1.png)
 
 - Fetch API
